@@ -1,5 +1,6 @@
 //// Service.js file:  holds functions that make all the CRUD transactions for one table ////
 const connection = require("../db/connection");
+
 function create(reservation) {
   const db = connection();
   return db("reservations").insert(reservation).returning("*");
