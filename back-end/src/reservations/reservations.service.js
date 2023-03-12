@@ -42,10 +42,10 @@ function list(date, mobile_number) {
   }
 
   if (mobile_number) {
-    const db = connection();
     return db("reservations")
       .select("*")
-      .where("mobile_number", "like", `${mobile_number}%`);
+      .where("mobile_number", "regexp", `^${mobile_number}`)
+      .orderBy("reservation_time", "asc");
   }
 
   return db("reservations").select("*");
