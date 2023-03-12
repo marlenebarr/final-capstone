@@ -33,20 +33,22 @@ function edit(reservation_id, reservation) {
 
 /** lists all reservations with the given date or mobile number. */
 function list(date, mobile_number) {
+  const db = connection();
   if (date) {
-    return knex("reservations")
+    return db("reservations")
       .select("*")
       .where({ reservation_date: date })
       .orderBy("reservation_time", "asc");
   }
 
   if (mobile_number) {
-    return knex("reservations")
+    const db = connection();
+    return db("reservations")
       .select("*")
       .where("mobile_number", "like", `${mobile_number}%`);
   }
 
-  return knex("reservations").select("*");
+  return db("reservations").select("*");
 }
 
 module.exports = {
