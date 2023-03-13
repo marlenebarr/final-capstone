@@ -1,7 +1,6 @@
 const service = require("./tables.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-
 ///// VALIDATORS /////
 
 /**
@@ -48,11 +47,10 @@ async function validateBody(request, response, next) {
   next();
 }
 
-
 /**
  * checks that the reservation_id exists
  */
- async function validateReservationId(request, response, next) {
+async function validateReservationId(request, response, next) {
   const { reservation_id } = request.body.data;
 
   if (!reservation_id) {
@@ -76,11 +74,10 @@ async function validateBody(request, response, next) {
   next();
 }
 
-
 /**
  * checks if the given table id exists
  */
- async function validateTableId(request, response, next) {
+async function validateTableId(request, response, next) {
   const { table_id } = request.params;
   const table = await service.read(table_id);
 
@@ -105,11 +102,10 @@ async function validateSeatedTable(request, response, next) {
   next();
 }
 
-
 /**
  * checks if table status and capacity are valid for the reservation to be seated
  */
- async function validateSeat(request, response, next) {
+async function validateSeat(request, response, next) {
   if (response.locals.table.status === "occupied") {
     return next({
       status: 400,
@@ -134,9 +130,7 @@ async function validateSeatedTable(request, response, next) {
   next();
 }
 
-
 ///// HANDLERS /////
-
 
 /**
  * creates a table.
@@ -154,16 +148,14 @@ async function create(request, response) {
   response.status(201).json({ data: res[0] });
 }
 
-
 /**
  * lists all tables on the dashboard
  */
- async function list(request, response) {
+async function list(request, response) {
   const res = await service.list();
 
   response.json({ data: res });
 }
-
 
 /**
  * updates a table when it is seated
@@ -181,7 +173,6 @@ async function update(request, response) {
   response.status(200).json({ data: { status: "seated" } });
 }
 
-
 /** finishes a table */
 async function destroy(request, response) {
   await service.updateReservation(
@@ -191,7 +182,6 @@ async function destroy(request, response) {
   await service.free(response.locals.table.table_id);
   response.status(200).json({ data: { status: "finished" } });
 }
-
 
 module.exports = {
   list: asyncErrorBoundary(list),
